@@ -100,13 +100,14 @@
 
             return url;
         },
-        createMultiFacetUrl: function (dataProp, facetList, sig) {
+        createMultiFacetUrl: function (dataProp, facetList, sig, itemId) {
             var url = this.setEndpoint(dataProp.endpoint);
 
             url += "?f=" + facetList.join(',').toLowerCase();
             url += (dataProp.s) ? "&s=" + dataProp.s : "";
             url += (dataProp.l) ? "&l=" + dataProp.l : "";
             url += (dataProp.q) ? "&q=" + encodeURIComponent(dataProp.q) : "";
+            url += itemId ? "&itemid=" + itemId : "";
 
             url += this.getFacetParams(dataProp, sig);
 
@@ -141,7 +142,7 @@
                     clearFacetName = facet.substring(facet.indexOf('_') + 1);
                     facetSignature = facet.substr(0, facet.indexOf('_'));
                     if (searchResultsSignature === facetSignature && specialParams.indexOf(clearFacetName) === -1) {
-                        url += "&" + clearFacetName + "=" + escape(clearIdData(dataProp[facet]));
+                        url += "&" + clearFacetName + "=" + encodeURI(clearIdData(dataProp[facet]));
                     }
                 }
             }
@@ -163,7 +164,7 @@
                 if (specialParams.indexOf(clearParamName) !== -1) {
                     paramValue = typeof dataProp[param] !== "undefined" ? dataProp[param] : "";
                     if (searchResultsSignature === paramSignature) {
-                        url += "&" + clearParamName + "=" + paramValue;
+                        url += "&" + clearParamName + "=" + encodeURIComponent(paramValue);
                     }
                 }
             }
